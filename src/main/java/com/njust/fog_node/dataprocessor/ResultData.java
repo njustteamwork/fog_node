@@ -4,12 +4,17 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class ResultData {
+    Long id = null;
     private String username;
     private Date earliestDate;
     private Date latestDate;
     private BigInteger sumOfTemperature;
     private BigInteger sumOfHeartRate;
     private int dataCount;
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public void setUsername(String username){
         this.username = username;

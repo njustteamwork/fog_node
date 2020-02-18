@@ -18,7 +18,7 @@ public class EDataAggregator {
             @Override
             public int compare(EncryptedDataForm data1, EncryptedDataForm data2) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                int flag = data1.getUsername().compareTo(data2.getUsername());
+                int flag = data1.getUserName().compareTo(data2.getUserName());
                     if (flag == 0){
                         try{
                             Date dt1 = format.parse(format.format(data1.getDate()));
@@ -42,7 +42,7 @@ public class EDataAggregator {
             //统计每名病人数据量
             int count = 0;
             for(int j = i + 1; j < dataList.size(); j++){
-                if(dataList.get(i).getUsername().equals(dataList.get(j).getUsername())){
+                if(dataList.get(i).getUserName().equals(dataList.get(j).getUserName())){
                     count++;
                 }else{ break; }
             }
@@ -50,7 +50,7 @@ public class EDataAggregator {
             ResultData resultData = new ResultData();
             resultDataList.add(resultData);
             //设置用户名 数据量 最早最晚时间
-            resultData.setUsername(dataList.get(i).getUsername());
+            resultData.setUsername(dataList.get(i).getUserName());
             resultData.setDataCount(count+1);
             resultData.setEarliestDate(dataList.get(i).getDate());
             resultData.setLatestDate(dataList.get(i+count).getDate());

@@ -15,12 +15,12 @@ public class EDFDaoImpl implements EDFDao {
 
     @Override
     public int addToRaw(EncryptedDataForm encryptedDataForm) {
-        return jdbcTemplate.update("insert into raw_encrypted_data(user_name, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUserName(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
+        return jdbcTemplate.update("insert into raw_encrypted_data(username, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
     }
 
     @Override
     public int addToUsed(EncryptedDataForm encryptedDataForm) {
-        return jdbcTemplate.update("insert into used_encrypted_data(user_name, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUserName(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
+        return jdbcTemplate.update("insert into used_encrypted_data(username, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
     }
 
     @Override

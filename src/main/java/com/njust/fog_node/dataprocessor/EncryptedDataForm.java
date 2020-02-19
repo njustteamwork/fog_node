@@ -8,7 +8,7 @@ import java.util.Date;
 public class EncryptedDataForm {
     private Long id = null;
     private Date date;
-    private String userName;
+    private String username;
     private BigInteger userTemperature;
     private BigInteger userHeartRate;
 
@@ -26,8 +26,8 @@ public class EncryptedDataForm {
     }
 
     //    聚合用
-    public String getUserName(){
-        return userName;
+    public String getUsername(){
+        return username;
     }
     public BigInteger getUserTemperature() {
         return userTemperature;
@@ -41,13 +41,13 @@ public class EncryptedDataForm {
     public Long getId(){return id;}
 
     //    测试用
-    public EncryptedDataForm(Date date,String userName){
+    public EncryptedDataForm(Date date,String username){
         this.date = date;
-        this.userName = userName;
+        this.username = username;
     }
 
     public void setDate(Date date) {this.date = date;}
-    public void setUserName(String userName) {this.userName = userName;}
+    public void setUserName(String username) {this.username = username;}
     public void setUserHeartRate(String userHeartRate) { this.userHeartRate = new BigInteger(userHeartRate);}
     public void setUserTemperature(String userTemperature) { this.userTemperature = new BigInteger(userTemperature);}
     public void setId(Long id){ this.id= id;}

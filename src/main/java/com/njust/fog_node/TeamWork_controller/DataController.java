@@ -23,5 +23,4 @@ public class DataController {
         edfDao.addToRaw(encryptedDataForm);
         return data;
     }
-
 }

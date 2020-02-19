@@ -28,7 +28,7 @@ public class TestController {
     public String test(){
         List<EncryptedDataForm> list = edfDao.queryEncryptedDataForms();
         for(EncryptedDataForm encryptedDataForm : list){
-            System.out.println(encryptedDataForm.getUserName());
+            System.out.println(encryptedDataForm.getUsername());
         }
         edfDao.deleteRawById(5L);
         return "i love java";

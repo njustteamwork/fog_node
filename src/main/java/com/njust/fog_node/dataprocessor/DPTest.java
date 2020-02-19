@@ -62,6 +62,7 @@ public class DPTest {
         // for(EncryptedDataForm edf : eDataList) System.out.println(edf.getID());
         EDataAggregator test = new EDataAggregator();
         List<ResultData> resultDataList = test.eDataAggregator(eDataList,paillierCalculator);
+        System.out.println(gson.toJson(resultDataList.get(0)));
 
     }
 

@@ -2,7 +2,6 @@ package com.njust.fog_node.dataprocessor;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.njust.fog_node.mysql.SpringUtil;
 import com.njust.fog_node.mysql.edf.EDFDao;
 import com.njust.fog_node.mysql.edf.EDFDaoImpl;
 import com.njust.fog_node.paillier.PaillierCalculator;

@@ -1,7 +1,6 @@
 package com.njust.fog_node;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.njust.fog_node.mysql.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +10,6 @@ import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
-@Import(SpringUtil.class)
 @SpringBootApplication
 public class FogNodeApplication {
 

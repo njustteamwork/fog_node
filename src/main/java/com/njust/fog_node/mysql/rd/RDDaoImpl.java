@@ -23,7 +23,7 @@ public class RDDaoImpl implements RDDao {
 
 
     public List<ResultData> queryResultData() {
-        List<ResultData> list = jdbcTemplate.query("select * from result_data order by id desc limit 100",new BeanPropertyRowMapper<ResultData>(ResultData.class));
+        List<ResultData> list = jdbcTemplate.query("select * from result_data order by id desc limit 20",new BeanPropertyRowMapper<ResultData>(ResultData.class));
         return list;
     }
 

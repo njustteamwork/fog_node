@@ -32,17 +32,13 @@ public class SaticScheduleTask {
     @Scheduled(fixedDelay = 5000)
     private void aggregatorTask() {
         List<EncryptedDataForm> list = null;
-        EncryptedDataForm edf = null;
-        Integer count;
         for(;;){
-            count = 0;
             list = edfDao.queryEncryptedDataForms();
             for(EncryptedDataForm encryptedDataForm : list){
                 System.out.println(encryptedDataForm.getId());
-                edf = list.get(count++);
-                edfDao.deleteRawById(edf.getId());
-                edf.setId(null);
-                edfDao.addToUsed(edf);
+                edfDao.deleteRawById(encryptedDataForm.getId());
+                encryptedDataForm.setId(null);
+                edfDao.addToUsed(encryptedDataForm);
             }
             EDataAggregator eda = new EDataAggregator();
 
@@ -51,7 +47,7 @@ public class SaticScheduleTask {
 
             rdDao.add(eda.eDataAggregator(list,paillierCalculator));
             if(list.size()<100){
-                System.out.println("执行静态定时任务结束时间: " + LocalDateTime.now());
+                System.out.println("执行静态定时聚合任务结束时间: " + LocalDateTime.now());
                 break;
             }
             else System.out.println("数据过多，处理完成并进行下一轮处理");
@@ -59,7 +55,7 @@ public class SaticScheduleTask {
 
     }
 
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(fixedDelay = 5000)
     private void sendTask(){
 
         Gson gson = new Gson();
@@ -68,13 +64,19 @@ public class SaticScheduleTask {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
 
         List<ResultData> list = rdDao.queryResultData();
-        for(ResultData resultData : list){
-            paramMap.add("data",gson.toJson(resultData));
-            System.out.println(resultData.getUserName());
-            String data = gson.toJson(resultData);
-            System.out.println(restTemplate.postForObject(url,paramMap,String.class));
-            paramMap.clear();
+        for(;;){
+            for(ResultData resultData : list){
+                paramMap.add("data",gson.toJson(resultData));
+                System.out.println(restTemplate.postForObject(url,paramMap,String.class));
+                paramMap.clear();
+                rdDao.deleteRawById(resultData.getId());
+            }
+            if(list.size()<100){
+                System.out.println("执行静态定时发送任务结束时间: " + LocalDateTime.now());
+                break;
+            }
         }
+
 
 
     }

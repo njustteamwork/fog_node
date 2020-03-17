@@ -1,4 +1,4 @@
-package com.njust.fog_node.TeamWork_controller;
+package com.njust.fog_node;
 
 import com.google.gson.Gson;
 import com.njust.fog_node.dataprocessor.EDataAggregator;

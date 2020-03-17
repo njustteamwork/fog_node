@@ -1,4 +1,4 @@
-package com.njust.fog_node.TeamWork_controller;
+package com.njust.fog_node.controller;
 
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
 import com.njust.fog_node.mysql.edf.EDFDaoImpl;

@@ -1,4 +1,4 @@
-package com.njust.fog_node.TeamWork_controller;
+package com.njust.fog_node.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

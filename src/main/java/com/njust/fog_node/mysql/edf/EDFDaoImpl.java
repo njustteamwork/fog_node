@@ -15,12 +15,12 @@ public class EDFDaoImpl implements EDFDao {
 
     @Override
     public int addToRaw(EncryptedDataForm encryptedDataForm) {
-        return jdbcTemplate.update("insert into raw_encrypted_data(username, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
+        return jdbcTemplate.update("insert into raw_encrypted_data(username, date,user_temperature,user_heart_rate,key_time_stamp) values(?, ?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate(),encryptedDataForm.getKeyTimeStamp());
     }
 
     @Override
     public int addToUsed(EncryptedDataForm encryptedDataForm) {
-        return jdbcTemplate.update("insert into used_encrypted_data(username, date,user_temperature,user_heart_rate) values(?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate());
+        return jdbcTemplate.update("insert into used_encrypted_data(username, date,user_temperature,user_heart_rate,key_time_stamp) values(?, ?, ?, ?, ?)",encryptedDataForm.getUsername(),encryptedDataForm.getDate(),encryptedDataForm.getUserTemperature(),encryptedDataForm.getUserHeartRate(),encryptedDataForm.getKeyTimeStamp());
     }
 
     @Override
@@ -31,7 +31,7 @@ public class EDFDaoImpl implements EDFDao {
 
     @Override
     public List<EncryptedDataForm> queryEncryptedDataForms() {
-        List<EncryptedDataForm> list = jdbcTemplate.query("select * from raw_encrypted_data order by id desc limit 100",new BeanPropertyRowMapper<EncryptedDataForm>(EncryptedDataForm.class));
+        List<EncryptedDataForm> list = jdbcTemplate.query("select * from raw_encrypted_data order by id limit 100",new BeanPropertyRowMapper<EncryptedDataForm>(EncryptedDataForm.class));
         return list;
     }
 }

@@ -11,6 +11,7 @@ public class EncryptedDataForm {
     private String username;
     private BigInteger userTemperature;
     private BigInteger userHeartRate;
+    private long keyTimeStamp;
 
     public EncryptedDataForm(){}
 
@@ -51,6 +52,14 @@ public class EncryptedDataForm {
     public void setUserHeartRate(String userHeartRate) { this.userHeartRate = new BigInteger(userHeartRate);}
     public void setUserTemperature(String userTemperature) { this.userTemperature = new BigInteger(userTemperature);}
     public void setId(Long id){ this.id= id;}
+
+    public long getKeyTimeStamp() {
+        return keyTimeStamp;
+    }
+
+    public void setKeyTimeStamp(long keyTimeStamp) {
+        this.keyTimeStamp = keyTimeStamp;
+    }
 }
 
 

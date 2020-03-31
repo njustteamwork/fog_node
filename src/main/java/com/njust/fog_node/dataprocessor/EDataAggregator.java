@@ -54,7 +54,7 @@ public class EDataAggregator {
             resultData.setDataCount(count+1);
             resultData.setEarliestDate(dataList.get(i).getDate());
             resultData.setLatestDate(dataList.get(i+count).getDate());
-
+            resultData.setKeyTimeStamp(dataList.get(i).getKeyTimeStamp());
 
             BigInteger sumOfTemperature = dataList.get(i).getUserTemperature();
             BigInteger sumOfHeartRate = dataList.get(i).getUserHeartRate();

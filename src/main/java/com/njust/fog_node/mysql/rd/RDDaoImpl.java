@@ -17,13 +17,13 @@ public class RDDaoImpl implements RDDao {
     @Override
     public void add(List<ResultData> list) {
         for(ResultData rd : list){
-            jdbcTemplate.update("insert into result_data(username,earliest_date,latest_date,sum_of_temperature,sum_of_heart_rate,data_count) values(?, ?, ?, ?, ?, ?)",rd.getUserName(),rd.getEarliestDate(),rd.getLatestDate(),rd.getSumOfTemperature(),rd.getSumOfHeartRate(),rd.getDataCount());
+            jdbcTemplate.update("insert into result_data(username,earliest_date,latest_date,sum_of_temperature,sum_of_heart_rate,data_count,key_time_stamp) values(?, ?, ?, ?, ?, ?, ?)",rd.getUserName(),rd.getEarliestDate(),rd.getLatestDate(),rd.getSumOfTemperature(),rd.getSumOfHeartRate(),rd.getDataCount(),rd.getKeyTimeStamp());
         }
     }
 
 
     public List<ResultData> queryResultData() {
-        List<ResultData> list = jdbcTemplate.query("select * from result_data order by id desc limit 20",new BeanPropertyRowMapper<ResultData>(ResultData.class));
+        List<ResultData> list = jdbcTemplate.query("select * from result_data order by id limit 20",new BeanPropertyRowMapper<ResultData>(ResultData.class));
         return list;
     }
 

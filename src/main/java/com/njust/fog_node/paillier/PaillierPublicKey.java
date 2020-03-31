@@ -1,6 +1,7 @@
 package com.njust.fog_node.paillier;
 
 import com.google.gson.Gson;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +15,7 @@ public class PaillierPublicKey {
     private BigInteger g;
     private int bitLength;
     private String userName;
-    private Long timeStamp = System.currentTimeMillis();
+    private Long timeStamp;
 
     public PaillierPublicKey(BigInteger n, BigInteger g, int bitLength){
         this.n = n;
@@ -47,10 +48,13 @@ public class PaillierPublicKey {
         return gson.fromJson(paillierPublicKey,PaillierPublicKey.class);
     }
 
-    /**
-     * 暂时以文件方式储存公钥
-     * 将在以后改为数据库储存
-     */
+    public boolean isTimeUp(){
+        Long currentTime = System.currentTimeMillis();
+        if(currentTime-timeStamp>86400000)
+            return true;
+        return false;
+    }
+
     public boolean saveToFile() throws Exception {
         try {
             String jsonPublicKey = this.getJsonStringPublicKey();
@@ -63,15 +67,33 @@ public class PaillierPublicKey {
     }
 
     public static PaillierPublicKey readFromFile() throws Exception{
+        Gson gson = new Gson();
+        String jsonPublicKey;
         try{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("PAILLIER_PUBLIC_KEY_FILE"));
-            String jsonPublicKey = ois.readObject().toString();
-            Gson gson = new Gson();
+           jsonPublicKey = ois.readObject().toString();
             PaillierPublicKey paillierPublicKey = gson.fromJson(jsonPublicKey, PaillierPublicKey.class);
             return paillierPublicKey;
         }catch (Exception e){
-            System.out.println("读取错误");
-            return null;
+            System.out.println("未找到密钥文件，将从云服务器获取密钥");
+            jsonPublicKey = PaillierPublicKey.renovate();
+            PaillierPublicKey paillierPublicKey = gson.fromJson(jsonPublicKey, PaillierPublicKey.class);
+            return paillierPublicKey;
         }
     }
+
+    public static String renovate(){
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8081/data/getPublicKey";
+        try {
+            String jsonPublicKey = restTemplate.postForObject(url,null,String.class);
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("PAILLIER_PUBLIC_KEY_FILE"));
+            oos.writeObject(jsonPublicKey);
+            return jsonPublicKey;
+        } catch (Exception e) {
+            System.out.println("密钥刷新失败！");
+            return "false";
+        }
+    }
+
 }

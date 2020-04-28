@@ -3,10 +3,7 @@ package com.njust.fog_node.paillier;
 import com.google.gson.Gson;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.math.BigInteger;
 
 public class PaillierPublicKey {
@@ -55,23 +52,37 @@ public class PaillierPublicKey {
         return false;
     }
 
-    public boolean saveToFile() throws Exception {
+    public boolean saveToFile(){
+        ObjectOutputStream oos = null;
         try {
             String jsonPublicKey = this.getJsonStringPublicKey();
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("PAILLIER_PUBLIC_KEY_FILE"));
+            oos = new ObjectOutputStream(new FileOutputStream("PAILLIER_PUBLIC_KEY_FILE"));
             oos.writeObject(jsonPublicKey);
             return true;
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("PAILLIER_PUBLIC_KEY_FILE文件未找到？");
             return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }finally {
+            try {
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
-    public static PaillierPublicKey readFromFile() throws Exception{
+    public static PaillierPublicKey readFromFile(){
         Gson gson = new Gson();
         String jsonPublicKey;
+        ObjectInputStream ois = null;
         try{
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("PAILLIER_PUBLIC_KEY_FILE"));
-           jsonPublicKey = ois.readObject().toString();
+            ois = new ObjectInputStream(new FileInputStream("PAILLIER_PUBLIC_KEY_FILE"));
+            jsonPublicKey = ois.readObject().toString();
             PaillierPublicKey paillierPublicKey = gson.fromJson(jsonPublicKey, PaillierPublicKey.class);
             return paillierPublicKey;
         }catch (Exception e){
@@ -79,20 +90,33 @@ public class PaillierPublicKey {
             jsonPublicKey = PaillierPublicKey.renovate();
             PaillierPublicKey paillierPublicKey = gson.fromJson(jsonPublicKey, PaillierPublicKey.class);
             return paillierPublicKey;
+        }finally {
+            try {
+                ois.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static String renovate(){
         RestTemplate restTemplate = new RestTemplate();
+        ObjectOutputStream oos = null;
         String url = "http://localhost:8081/data/getPublicKey";
         try {
             String jsonPublicKey = restTemplate.postForObject(url,null,String.class);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("PAILLIER_PUBLIC_KEY_FILE"));
+            oos = new ObjectOutputStream(new FileOutputStream("PAILLIER_PUBLIC_KEY_FILE"));
             oos.writeObject(jsonPublicKey);
             return jsonPublicKey;
         } catch (Exception e) {
             System.out.println("密钥刷新失败！");
             return "false";
+        }finally{
+            try {
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

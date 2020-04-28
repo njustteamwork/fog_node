@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("data")
 public class DataController {
-    public DataController() throws Exception {
+    public DataController(){
     }
 
     @Autowired

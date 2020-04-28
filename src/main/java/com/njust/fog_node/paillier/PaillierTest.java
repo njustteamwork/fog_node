@@ -9,18 +9,10 @@ public class PaillierTest {
     String s = gson.toJson(paillierPublicKey);
     System.out.println(s);
     PaillierPublicKey paillierPublicKey1 = null;
-        try {
-            paillierPublicKey.saveToFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            paillierPublicKey1 = PaillierPublicKey.readFromFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    paillierPublicKey.saveToFile();
+    paillierPublicKey1 = PaillierPublicKey.readFromFile();
     s = gson.toJson(paillierPublicKey1);
-        System.out.println(s);
+    System.out.println(s);
     }
 
 }

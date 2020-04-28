@@ -30,7 +30,7 @@ public class SaticScheduleTask {
 
     //添加定时任务
     @Scheduled(fixedDelay = 5000)
-    private void aggregatorTask() throws Exception {
+    private void aggregatorTask(){
         List<EncryptedDataForm> list;
         for(;;){
             list = edfDao.queryEncryptedDataForms();

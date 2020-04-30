@@ -32,7 +32,8 @@ public class SaticScheduleTask {
     @Scheduled(fixedDelay = 5000)
     private void aggregatorTask(){
         List<EncryptedDataForm> list;
-        for(;;){
+
+        while(true){
             list = edfDao.queryEncryptedDataForms();
             if(list.size()==0) break;
             for(EncryptedDataForm encryptedDataForm : list){
@@ -44,6 +45,12 @@ public class SaticScheduleTask {
             //PaillierPublicKey paillierPublicKey = PaillierPublicKey.paillierJsonToPublicKey("{\"n\":7037996759611275900405487329144489085210900622405788623915340046554895678557675360099993502545810105916795350348201798995744651664108236879690390748857833,\"nSquare\":49533398388298819693190911443085500113137594389227717398938303574532356291531019850234314622241175041250992063305927006862844026670633749958420794136365527887009273250901790502746504678689585917463571409706569379921923499464969602901871572009667889989146252127852333968575165007138552703354893437794045455889,\"g\":47,\"bitLength\":512,\"timeStamp\":1580452220178}");
             PaillierPublicKey paillierPublicKey = PaillierPublicKey.readFromFile();
             PaillierCalculator paillierCalculator = new PaillierCalculator(paillierPublicKey);
+            if(paillierPublicKey.isTimeUp()){
+                System.out.println("聚合时检测到密钥过期，将重置密钥。");
+                PaillierPublicKey.renovate();
+                paillierPublicKey = PaillierPublicKey.readFromFile();
+                paillierCalculator = new PaillierCalculator(paillierPublicKey);
+            }
 
             rdDao.add(eda.eDataAggregator(list,paillierCalculator));
 
@@ -65,10 +72,11 @@ public class SaticScheduleTask {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         List<ResultData> list = rdDao.queryResultData();
         if(list.size()==0) return;
-        for(;;){
+        while(true){
             for(ResultData resultData : list){
                 paramMap.add("data",gson.toJson(resultData));
                 String response = restTemplate.postForObject(url,paramMap,String.class);
+                System.out.println("云端返回消息："+response);
                 if(response.equals("WKTS")){
                     System.out.println("密钥过期，重置密钥");
                     PaillierPublicKey.renovate();

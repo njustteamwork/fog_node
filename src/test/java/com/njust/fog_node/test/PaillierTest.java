@@ -1,6 +1,7 @@
-package com.njust.fog_node.paillier;
+package com.njust.fog_node.test;
 
 import com.google.gson.Gson;
+import com.njust.fog_node.paillier.PaillierPublicKey;
 
 public class PaillierTest {
     public static void main(String args[]){

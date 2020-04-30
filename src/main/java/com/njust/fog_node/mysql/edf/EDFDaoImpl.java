@@ -2,6 +2,7 @@ package com.njust.fog_node.mysql.edf;
 
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

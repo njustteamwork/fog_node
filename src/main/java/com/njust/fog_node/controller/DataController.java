@@ -24,7 +24,6 @@ public class DataController {
     public String postEData(@RequestParam String data){
         System.out.println(data);
         EncryptedDataForm encryptedDataForm = EncryptedDataForm.jsonToEncryptedDataForm(data);
-        System.out.println(encryptedDataForm.getKeyTimeStamp());
         if(encryptedDataForm.getKeyTimeStamp()!= paillierPublicKey.getTimeStamp())
             return "WKTS";
         edfDao.addToRaw(encryptedDataForm);

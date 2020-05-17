@@ -11,15 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("data")
+/**
+ * 用于接收安卓端数据的controller
+ */
 public class DataController {
-    public DataController(){
-    }
 
     @Autowired
     private EDFDaoImpl edfDao;
 
     private PaillierPublicKey paillierPublicKey = PaillierPublicKey.readFromFile();
 
+    /**
+     * 接受安卓端的数据
+     * @param data 安卓端数据
+     * @return 密钥错误就返回WTKS，无误就返回got it
+     */
     @PostMapping("/postEData")
     public String postEData(@RequestParam String data){
         System.out.println(data);

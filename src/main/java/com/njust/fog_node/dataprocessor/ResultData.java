@@ -3,6 +3,9 @@ package com.njust.fog_node.dataprocessor;
 import java.math.BigInteger;
 import java.util.Date;
 
+/**
+ * 聚合后的数据
+ */
 public class ResultData {
     Long id = null;
     private String username;

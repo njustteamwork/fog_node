@@ -1,6 +1,5 @@
 package com.njust.fog_node.mysql.rd;
 
-import com.njust.fog_node.dataprocessor.EncryptedDataForm;
 import com.njust.fog_node.dataprocessor.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * ResultDataDAO接口的实现类
+ */
 @Repository
 public class RDDaoImpl implements RDDao {
     @Autowired

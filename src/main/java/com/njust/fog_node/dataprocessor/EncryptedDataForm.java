@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import java.math.BigInteger;
 import java.util.Date;
 
+/**
+ * 同态加密后的数据
+ */
 public class EncryptedDataForm {
     private Long id = null;
     private Date date;

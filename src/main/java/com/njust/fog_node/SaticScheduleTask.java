@@ -29,6 +29,7 @@ public class SaticScheduleTask {
     private RDDaoImpl rdDao;
 
     //添加定时任务
+    //每5秒执行一次聚合任务
     @Scheduled(fixedDelay = 5000)
     private void aggregatorTask(){
         List<EncryptedDataForm> list;
@@ -63,6 +64,8 @@ public class SaticScheduleTask {
 
     }
 
+
+    //每五秒执行一次发送任务
     @Scheduled(fixedDelay = 5000)
     private void sendTask(){
 

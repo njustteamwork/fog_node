@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * EncryptedDataForm的DAO接口实现类
+ */
 @Repository
 public class EDFDaoImpl implements EDFDao {
     @Autowired

@@ -19,7 +19,7 @@ public class DataController {
     @Autowired
     private EDFDaoImpl edfDao;
 
-    private PaillierPublicKey paillierPublicKey = PaillierPublicKey.readFromFile();
+    private PaillierPublicKey paillierPublicKey;
 
     /**
      * 接受安卓端的数据
@@ -28,6 +28,9 @@ public class DataController {
      */
     @PostMapping("/postEData")
     public String postEData(@RequestParam String data){
+        if(paillierPublicKey == null)
+            PaillierPublicKey.renovate();
+            paillierPublicKey = PaillierPublicKey.readFromFile();
         System.out.println(data);
         EncryptedDataForm encryptedDataForm = EncryptedDataForm.jsonToEncryptedDataForm(data);
         if(encryptedDataForm.getKeyTimeStamp()!= paillierPublicKey.getTimeStamp())

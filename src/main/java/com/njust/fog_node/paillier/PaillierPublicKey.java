@@ -91,10 +91,12 @@ public class PaillierPublicKey {
             PaillierPublicKey paillierPublicKey = gson.fromJson(jsonPublicKey, PaillierPublicKey.class);
             return paillierPublicKey;
         }finally {
-            try {
-                ois.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(ois!=null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

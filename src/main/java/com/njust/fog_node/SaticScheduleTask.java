@@ -73,9 +73,9 @@ public class SaticScheduleTask {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8081/data/postRData";
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        List<ResultData> list = rdDao.queryResultData();
-        if(list.size()==0) return;
         while(true){
+            List<ResultData> list = rdDao.queryResultData();
+            if(list.size()==0) return;
             for(ResultData resultData : list){
                 paramMap.add("data",gson.toJson(resultData));
                 String response = restTemplate.postForObject(url,paramMap,String.class);
@@ -87,7 +87,7 @@ public class SaticScheduleTask {
                 paramMap.clear();
                 rdDao.deleteRawById(resultData.getId());
             }
-            if(list.size()<100){
+            if(list.size()<20){
                 System.out.println("执行静态定时发送任务结束时间: " + LocalDateTime.now());
                 break;
             }

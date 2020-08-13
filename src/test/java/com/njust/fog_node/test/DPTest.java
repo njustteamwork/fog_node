@@ -5,8 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import com.njust.fog_node.dataprocessor.EDataAggregator;
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
 import com.njust.fog_node.dataprocessor.ResultData;
-import com.njust.fog_node.mysql.edf.EDFDao;
-import com.njust.fog_node.mysql.edf.EDFDaoImpl;
 import com.njust.fog_node.paillier.PaillierCalculator;
 import com.njust.fog_node.paillier.PaillierPublicKey;
 import java.text.ParseException;

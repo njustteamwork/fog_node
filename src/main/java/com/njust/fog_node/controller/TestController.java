@@ -1,7 +1,7 @@
 package com.njust.fog_node.controller;
 
+import com.njust.fog_node.dataprocessor.DataContainer;
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
-import com.njust.fog_node.mysql.edf.EDFDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,9 @@ import java.util.List;
  */
 @RestController
 public class TestController {
+
     @Autowired
-    private EDFDaoImpl edfDao;
+    private DataContainer dataContainer;
 
     @GetMapping("/hello")
     public String hello(){
@@ -29,11 +30,10 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(){
-        List<EncryptedDataForm> list = edfDao.queryEncryptedDataForms();
+        List<EncryptedDataForm> list = dataContainer.queryEncryptedDataForms();
         for(EncryptedDataForm encryptedDataForm : list){
             System.out.println(encryptedDataForm.getUsername());
         }
-        edfDao.deleteRawById(5L);
         return "i love java";
     }
 

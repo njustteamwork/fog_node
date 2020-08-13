@@ -1,11 +1,10 @@
 package com.njust.fog_node;
 
 import com.google.gson.Gson;
+import com.njust.fog_node.dataprocessor.DataContainer;
 import com.njust.fog_node.dataprocessor.EDataAggregator;
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
 import com.njust.fog_node.dataprocessor.ResultData;
-import com.njust.fog_node.mysql.edf.EDFDaoImpl;
-import com.njust.fog_node.mysql.rd.RDDaoImpl;
 import com.njust.fog_node.paillier.PaillierCalculator;
 import com.njust.fog_node.paillier.PaillierPublicKey;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +21,9 @@ import java.util.List;
 @Configuration      //主要用于标记配置类，兼备Component的效果。
 @EnableScheduling   // 开启定时任务
 public class SaticScheduleTask {
-    @Autowired
-    private EDFDaoImpl edfDao;
 
     @Autowired
-    private RDDaoImpl rdDao;
+    DataContainer dataContainer;
 
     //添加定时任务
     //每5秒执行一次聚合任务
@@ -35,15 +32,13 @@ public class SaticScheduleTask {
         List<EncryptedDataForm> list;
 
         while(true){
-            list = edfDao.queryEncryptedDataForms();
+            list = dataContainer.queryEncryptedDataForms();
             if(list.size()==0) break;
+            int listSize = list.size();
             for(EncryptedDataForm encryptedDataForm : list){
-                edfDao.deleteRawById(encryptedDataForm.getId());
                 encryptedDataForm.setId(null);
-                edfDao.addToUsed(encryptedDataForm);
             }
             EDataAggregator eda = new EDataAggregator();
-            //PaillierPublicKey paillierPublicKey = PaillierPublicKey.paillierJsonToPublicKey("{\"n\":7037996759611275900405487329144489085210900622405788623915340046554895678557675360099993502545810105916795350348201798995744651664108236879690390748857833,\"nSquare\":49533398388298819693190911443085500113137594389227717398938303574532356291531019850234314622241175041250992063305927006862844026670633749958420794136365527887009273250901790502746504678689585917463571409706569379921923499464969602901871572009667889989146252127852333968575165007138552703354893437794045455889,\"g\":47,\"bitLength\":512,\"timeStamp\":1580452220178}");
             PaillierPublicKey paillierPublicKey = PaillierPublicKey.readFromFile();
             PaillierCalculator paillierCalculator = new PaillierCalculator(paillierPublicKey);
             if(paillierPublicKey.isTimeUp()){
@@ -53,13 +48,12 @@ public class SaticScheduleTask {
                 paillierCalculator = new PaillierCalculator(paillierPublicKey);
             }
 
-            rdDao.add(eda.eDataAggregator(list,paillierCalculator));
+            dataContainer.addResultData(eda.eDataAggregator(list,paillierCalculator));
 
-            if(list.size()<100){
-                System.out.println("执行静态定时聚合任务结束时间: " + LocalDateTime.now());
-                break;
-            }
-            else System.out.println("数据过多，处理完成并进行下一轮处理");
+            System.out.println("执行静态定时聚合任务结束时间: " + LocalDateTime.now());
+            System.out.println("聚合数量：" + listSize);
+            if(listSize<100) break;
+            else System.out.println("数据数量超过阈值，处理完成并进行下一轮处理");
         }
 
     }
@@ -74,7 +68,8 @@ public class SaticScheduleTask {
         String url = "http://localhost:8081/data/postRData";
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         while(true){
-            List<ResultData> list = rdDao.queryResultData();
+            List<ResultData> list = dataContainer.queryResultData();
+
             if(list.size()==0) return;
             for(ResultData resultData : list){
                 paramMap.add("data",gson.toJson(resultData));
@@ -85,7 +80,6 @@ public class SaticScheduleTask {
                     PaillierPublicKey.renovate();
                 }
                 paramMap.clear();
-                rdDao.deleteRawById(resultData.getId());
             }
             if(list.size()<20){
                 System.out.println("执行静态定时发送任务结束时间: " + LocalDateTime.now());

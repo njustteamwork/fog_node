@@ -1,7 +1,7 @@
 package com.njust.fog_node.controller;
 
+import com.njust.fog_node.dataprocessor.DataContainer;
 import com.njust.fog_node.dataprocessor.EncryptedDataForm;
-import com.njust.fog_node.mysql.edf.EDFDaoImpl;
 import com.njust.fog_node.paillier.PaillierPublicKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DataController {
 
     @Autowired
-    private EDFDaoImpl edfDao;
+    private DataContainer dataContainer;
 
     private PaillierPublicKey paillierPublicKey;
 
@@ -31,11 +31,11 @@ public class DataController {
         if(paillierPublicKey == null)
             PaillierPublicKey.renovate();
             paillierPublicKey = PaillierPublicKey.readFromFile();
-        System.out.println(data);
+        //System.out.println(data);
         EncryptedDataForm encryptedDataForm = EncryptedDataForm.jsonToEncryptedDataForm(data);
         if(encryptedDataForm.getKeyTimeStamp()!= paillierPublicKey.getTimeStamp())
             return "WKTS";
-        edfDao.addToRaw(encryptedDataForm);
+        dataContainer.addEncryptedDataForm(encryptedDataForm);
         return "got it";
     }
 }
